@@ -25,6 +25,7 @@ public class Shooting extends Application {
     private final Canvas canvas = new Canvas(640,480);
     private List<Point> inputPoints = new ArrayList<>();
     private BezierCurve bezier;
+    private Target target;
     
     @Override
     public void start(Stage primaryStage) {
@@ -34,7 +35,7 @@ public class Shooting extends Application {
         clearBtn.setOnMouseClicked((MouseEvent e) -> {
             clearScreen();
         });
-        Button lineBtn = new Button("Draw");
+        Button lineBtn = new Button("Line");
         lineBtn.setOnMouseClicked((MouseEvent e)->{
             for(int i = 0; i < inputPoints.size()-1;i++){
                 drawLine(inputPoints.get(i), inputPoints.get(i+1));
@@ -49,16 +50,25 @@ public class Shooting extends Application {
                 drawLine(ep.get(i), ep.get(i+1));
             }
         });
+        Button targetBtn = new Button("Target");
+        targetBtn.setOnMouseClicked((MouseEvent e)->{
+            target = new Target(canvas.getWidth(), canvas.getHeight());
+            drawPoint(target.createFirstPoint(), target.getRadius());
+            drawPoint(target.createLastPoint(), target.getRadius());
+        });
         
         Pane pane = new Pane(canvas);
         pane.getChildren().add(clearBtn);
         pane.getChildren().add(lineBtn);
         pane.getChildren().add(bezierBtn);
+        pane.getChildren().add(targetBtn);
         Scene scene = new Scene(pane);
         
         clearBtn.relocate(0, 0);
         lineBtn.relocate(50, 0);
         bezierBtn.relocate(100, 0);
+        targetBtn.relocate(150, 0);
+        
 
         primaryStage.setTitle("Shoot!!");
         primaryStage.setScene(scene);
@@ -66,17 +76,25 @@ public class Shooting extends Application {
     }
     
     public void drawPoint(MouseEvent e){
-        int r = 3;
-        canvas.getGraphicsContext2D().strokeOval(e.getX()-(r/2), e.getY()-(r/2), r, r);
+        int r = 5;
+        canvas.getGraphicsContext2D()
+                .strokeOval(e.getX()-(r/2), e.getY()-(r/2), r, r);
         inputPoints.add(new Point(e.getX(), e.getY()));
     }
     
+    public void drawPoint(Point p, int r){
+        canvas.getGraphicsContext2D()
+                .fillOval(p.getX()-(r/2), p.getY()-(r/2), r, r);
+    }
+    
     public void drawLine(Point p1, Point p2){
-        canvas.getGraphicsContext2D().strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        canvas.getGraphicsContext2D()
+                .strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
     
     public void clearScreen(){
-        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        canvas.getGraphicsContext2D()
+                .clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         inputPoints.clear();
     }
 
