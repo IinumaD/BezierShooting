@@ -6,8 +6,6 @@
 package shooting;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,7 +21,7 @@ import java.util.ArrayList;
  */
 public class Shooting extends Application {
     private final Canvas canvas = new Canvas(640,480);
-    private List<Point> inputPoints = new ArrayList<>();
+    private final List<Point> inputPoints = new ArrayList<>();
     private BezierCurve bezier;
     private Target target;
     
@@ -53,8 +51,16 @@ public class Shooting extends Application {
         Button targetBtn = new Button("Target");
         targetBtn.setOnMouseClicked((MouseEvent e)->{
             target = new Target(canvas.getWidth(), canvas.getHeight());
-            drawPoint(target.createFirstPoint(), target.getRadius());
-            drawPoint(target.createLastPoint(), target.getRadius());
+            target.getTargets().forEach(list->drawPoint(list, 7));
+            drawPoint(target.getFirstPoint(), 15);
+            drawPoint(target.getLastPoint(), 15);
+        });
+        Button answerBtn = new Button("Answer");
+        answerBtn.setOnMouseClicked((MouseEvent e)->{
+            List<Point> ans = target.getAnswerCurve();
+            for(int i = 0; i < ans.size()-1;i++){
+                drawLine(ans.get(i), ans.get(i+1));
+            }
         });
         
         Pane pane = new Pane(canvas);
@@ -62,15 +68,17 @@ public class Shooting extends Application {
         pane.getChildren().add(lineBtn);
         pane.getChildren().add(bezierBtn);
         pane.getChildren().add(targetBtn);
+        pane.getChildren().add(answerBtn);
         Scene scene = new Scene(pane);
         
         clearBtn.relocate(0, 0);
         lineBtn.relocate(50, 0);
         bezierBtn.relocate(100, 0);
         targetBtn.relocate(150, 0);
+        answerBtn.relocate(200, 0);
         
 
-        primaryStage.setTitle("Shoot!!");
+        primaryStage.setTitle("Bezier Shooting");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

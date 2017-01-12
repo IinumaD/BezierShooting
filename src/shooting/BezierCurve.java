@@ -58,6 +58,10 @@ public class BezierCurve {
         this.grade = newPoints.size()-1;
     }
     
+    public List<Point> getControlPoint(){
+        return this.controlPoints;
+    }
+    
     public List<Point> getEvaluatedPoints(){
         return this.evaluatedPoints;
     }
