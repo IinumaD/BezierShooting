@@ -6,8 +6,10 @@
 package shooting;
 import java.util.List;
 import java.util.ArrayList;
-import java.lang.Math;
 import java.util.Random;
+import java.util.Collections;
+import java.util.Comparator;
+
 
 /**
  *
@@ -60,6 +62,7 @@ public class Target {
             points.add(new Point(x,y));
         }
         
+        Collections.sort(points, (Point p1, Point p2) -> Double.compare(p1.getX(), p2.getX()));
         return points;
     }
     
@@ -81,7 +84,6 @@ public class Target {
                     sel == 0 ||
                     sel == answer.getEvaluatedPoints().size()-1){
                 i--;
-                continue;
             }else{
                 selectedIdx.add(sel);
             }
@@ -102,6 +104,10 @@ public class Target {
     public Point getLastPoint(){
         List<Point> list = this.answer.getControlPoint();
         return list.get(list.size()-1);
+    }
+    
+    public List<Point> getControlPoint(){
+        return this.answer.getControlPoint();
     }
     
     public List<Point> getAnswerCurve(){

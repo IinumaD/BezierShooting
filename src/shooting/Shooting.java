@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import java.util.List;
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -58,6 +59,11 @@ public class Shooting extends Application {
         Button answerBtn = new Button("Answer");
         answerBtn.setOnMouseClicked((MouseEvent e)->{
             List<Point> ans = target.getAnswerCurve();
+            List<Point> cp = target.getControlPoint();
+            cp.forEach(p->drawPointWithColor(p, 7, Color.RED));
+            for(int i = 0; i < cp.size()-1; i++){
+                drawLine(cp.get(i), cp.get(i+1));
+            }
             for(int i = 0; i < ans.size()-1;i++){
                 drawLine(ans.get(i), ans.get(i+1));
             }
@@ -93,6 +99,14 @@ public class Shooting extends Application {
     public void drawPoint(Point p, int r){
         canvas.getGraphicsContext2D()
                 .fillOval(p.getX()-(r/2), p.getY()-(r/2), r, r);
+    }
+    
+    public void drawPointWithColor(Point p, int r, Color color){
+        canvas.getGraphicsContext2D()
+                .setFill(color);
+        drawPoint(p, r);
+        canvas.getGraphicsContext2D()
+                .setFill(Color.BLACK);
     }
     
     public void drawLine(Point p1, Point p2){
