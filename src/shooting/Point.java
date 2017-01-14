@@ -10,8 +10,8 @@ package shooting;
  * @author Iinuma
  */
 public class Point {
-    private Double x;
-    private Double y;
+    private final Double x;
+    private final Double y;
     
     /**
      * コンストラクタ
@@ -34,10 +34,10 @@ public class Point {
     
     /**
      * 点p1と点p2をr1:r2で内聞する点を計算する.
-     * @param p1
-     * @param p2
-     * @param r1
-     * @param r2
+     * @param p1 : 1つ目の点
+     * @param p2 : 2つ目の点
+     * @param r1 : 内分比
+     * @param r2 : 内分比
      * @return 点p1と点p2をr1:r2で内分する点
      * 
      */

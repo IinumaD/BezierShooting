@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BezierCurve {
     private List<Point> controlPoints = new ArrayList<>();
-    private List<Point> evaluatedPoints = new ArrayList<>();
+    private final List<Point> evaluatedPoints = new ArrayList<>();
     private Integer grade;
     
     public BezierCurve(List<Point> controlPoints){

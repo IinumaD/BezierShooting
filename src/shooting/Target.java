@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Collections;
-import java.util.Comparator;
 
 
 /**
@@ -16,15 +15,15 @@ import java.util.Comparator;
  * @author Iinuma
  */
 public class Target {
-    private List<Point> targets = new ArrayList<>();
+    private final List<Point> targets = new ArrayList<>();
     private BezierCurve answer;
     private final Integer radius = 10;
     private final Double start;
     private final Double goal;
-    private Random random;
-    private Double maxX;
-    private Double maxY;
-    private Double limitY;
+    private final Random random;
+    private final Double maxX;
+    private final Double maxY;
+    private final Double limitY;
     
     public Target(double screenWidth, double screenHeight){
         random = new Random();
