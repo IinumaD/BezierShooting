@@ -14,7 +14,10 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import java.util.List;
 import java.util.ArrayList;
+import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
 
 /**
  *
@@ -25,9 +28,11 @@ public class Shooting extends Application {
     private final List<Point> inputPoints = new ArrayList<>();
     private BezierCurve bezier;
     private Target target;
+    private Integer score = 0;
     
     @Override
     public void start(Stage primaryStage) {
+        Label scoreLabel = new Label("Score : " + 0);
         
         canvas.setOnMouseClicked(this::drawPoint);
         Button clearBtn = new Button("Clear");
@@ -41,20 +46,27 @@ public class Shooting extends Application {
             }
         });
         Button bezierBtn = new Button("Bezier");
-        bezierBtn.setOnMouseClicked((MouseEvent e)->{
+        bezierBtn.setOnMouseClicked((MouseEvent e) -> {
             bezier = new BezierCurve(inputPoints);
             bezier.evaluate();
             List<Point> ep = bezier.getEvaluatedPoints();
             for(int i = 0; i < ep.size()-1; i++){
                 drawLine(ep.get(i), ep.get(i+1));
             }
+
+            for(int i = 0; i < target.getTargets().size(); i++){
+                score += Score.caluclate(ep, target.getTargets().get(i), 10);
+            }
+            scoreLabel.setText("Score : " + score.toString());
         });
         Button targetBtn = new Button("Target");
         targetBtn.setOnMouseClicked((MouseEvent e)->{
             target = new Target(canvas.getWidth(), canvas.getHeight());
-            target.getTargets().forEach(list->drawPoint(list, 7));
+            target.createTargets();
+            target.getTargets().forEach(list->drawPoint(list, 10));
             drawPoint(target.getFirstPoint(), 15);
             drawPoint(target.getLastPoint(), 15);
+            
         });
         Button answerBtn = new Button("Answer");
         answerBtn.setOnMouseClicked((MouseEvent e)->{
@@ -70,18 +82,18 @@ public class Shooting extends Application {
         });
         
         Pane pane = new Pane(canvas);
-        pane.getChildren().add(clearBtn);
-        pane.getChildren().add(lineBtn);
-        pane.getChildren().add(bezierBtn);
-        pane.getChildren().add(targetBtn);
-        pane.getChildren().add(answerBtn);
+        HBox btns = new HBox();
+        btns.getChildren().add(bezierBtn);
+        btns.getChildren().add(lineBtn);
+        btns.getChildren().add(clearBtn);
+        btns.getChildren().add(targetBtn);
+        btns.getChildren().add(answerBtn);
+        pane.getChildren().add(btns);
+        pane.getChildren().add(scoreLabel);
         Scene scene = new Scene(pane);
         
-        clearBtn.relocate(0, 0);
-        lineBtn.relocate(50, 0);
-        bezierBtn.relocate(100, 0);
-        targetBtn.relocate(150, 0);
-        answerBtn.relocate(200, 0);
+        btns.relocate(0, 0);
+        scoreLabel.relocate(canvas.getWidth() - 100, 0);
         
 
         primaryStage.setTitle("Bezier Shooting");

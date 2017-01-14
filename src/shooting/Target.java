@@ -75,6 +75,11 @@ public class Target {
         answer.evaluate();
     }
     
+    public void createTargets(){
+        create();
+        selectTarget().forEach(idx->targets.add(answer.getEvaluatedPoints().get(idx)));
+    }
+    
     public List<Integer> selectTarget(){
         List<Integer> selectedIdx = new ArrayList<>();
         for(int i = 0; i < 10; i++){
@@ -91,9 +96,7 @@ public class Target {
     }
     
     public List<Point> getTargets(){
-        create();
-        selectTarget().forEach(idx->targets.add(answer.getEvaluatedPoints().get(idx)));
-        return targets;
+        return this.targets;
     }
     
     public Point getFirstPoint(){
