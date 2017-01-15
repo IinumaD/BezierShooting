@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import java.util.List;
 import java.util.ArrayList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.HBox;
@@ -29,6 +28,7 @@ public class Shooting extends Application {
     private BezierCurve bezier;
     private Target target;
     private Integer score = 0;
+    private boolean rewrite = false;
     
     @Override
     public void start(Stage primaryStage) {
@@ -55,7 +55,11 @@ public class Shooting extends Application {
             }
 
             for(int i = 0; i < target.getTargets().size(); i++){
-                score += Score.caluclate(ep, target.getTargets().get(i), 10);
+                int nscore = Score.caluclate(ep, target.getTargets().get(i), 10);
+                score += nscore;
+                if(nscore != 0){
+                    target.destroyTarget(i);
+                }
             }
             scoreLabel.setText("Score : " + score.toString());
         });
@@ -65,8 +69,7 @@ public class Shooting extends Application {
             target.createTargets();
             target.getTargets().forEach(list->drawPoint(list, 10));
             drawPoint(target.getFirstPoint(), 15);
-            drawPoint(target.getLastPoint(), 15);
-            
+            drawPoint(target.getLastPoint(), 15);   
         });
         Button answerBtn = new Button("Answer");
         answerBtn.setOnMouseClicked((MouseEvent e)->{
@@ -80,6 +83,13 @@ public class Shooting extends Application {
                 drawLine(ans.get(i), ans.get(i+1));
             }
         });
+        Button nextBtn = new Button("Next");
+        nextBtn.setOnMouseClicked((MouseEvent e)->{
+            clearScreen();
+            target.getTargets().forEach(list->drawPoint(list, 10));
+            drawPoint(target.getFirstPoint(), 15);
+            drawPoint(target.getLastPoint(), 15);          
+        });
         
         Pane pane = new Pane(canvas);
         HBox btns = new HBox();
@@ -88,6 +98,7 @@ public class Shooting extends Application {
         btns.getChildren().add(clearBtn);
         btns.getChildren().add(targetBtn);
         btns.getChildren().add(answerBtn);
+        btns.getChildren().add(nextBtn);
         pane.getChildren().add(btns);
         pane.getChildren().add(scoreLabel);
         Scene scene = new Scene(pane);

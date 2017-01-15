@@ -95,6 +95,14 @@ public class Target {
         return selectedIdx;
     }
     
+    public void destroyTarget(int index){
+        if(!targets.isEmpty()){
+            targets.remove(index);
+        }else{
+            System.err.println("Target is Empty.");
+        }
+    }
+    
     public List<Point> getTargets(){
         return this.targets;
     }
