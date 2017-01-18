@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 
 /**
@@ -82,16 +83,22 @@ public class Target {
     
     public List<Integer> selectTarget(){
         List<Integer> selectedIdx = new ArrayList<>();
+        
         for(int i = 0; i < 10; i++){
             Integer sel = random.nextInt(answer.getEvaluatedPoints().size());
             if(selectedIdx.contains(sel) ||
                     sel == 0 ||
-                    sel == answer.getEvaluatedPoints().size()-1){
+                    sel == answer.getEvaluatedPoints().size()-1 ||
+                    isContains(selectedIdx, 50, sel)){
                 i--;
-            }else{
+            }
+            
+            else{
                 selectedIdx.add(sel);
             }
         }  
+        
+        
         return selectedIdx;
     }
     
@@ -128,4 +135,13 @@ public class Target {
         return this.radius;
     }
     
+    private boolean isContains(List<Integer> list, int range, Integer number){
+        for(Integer num : list){
+            if(num-range < number && number < num+range) {
+                System.out.println(number + " contain in list. ("+num + ", " + range+")");
+                return true;
+            }
+        }
+        return false;
+    }
 }
